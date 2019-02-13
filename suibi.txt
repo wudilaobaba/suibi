@@ -1,0 +1,836 @@
+﻿配置host的意义在于：
+进入C:\Windows\System32\drivers\etc  打开hosts文件
+在里面写 127.0.0.1    www.ppp.com
+意思就是：如果本地开启了一个服务，浏览器访问www.ppp.com，就相当于访问了127.0.0.1
+以上只可以这样写 127.0.0.1    www.ppp.com   1270.0.1后面不要加端口
+此时此刻：http-server -p 2222
+浏览器输入：www.ppp.com:2222 就相当于访问了127.0.0.1:2222
+如果http-server -p 80 这样的80端口，则访问www.ppp.com和127.0.0.1就行，不需要加端口号
+
+//------------------
+
+测试请求json数据地址：
+//https://api.github.com/users/itstrive
+//http://newsapi.gugujiankong.com/Handler.ashx?action=getnews&type=top&count=3
+//https://facebook.github.io/react-native/movies.json
+//http://api.meituan.com/group/v2/recommend/homepage/city/20?userId=160495643&userid=160495643&__vhost=api.mobile.meituan.com&position=23.134643%2C113.373951&movieBundleVersion=100&utm_term=6.6&limit=40&wifi-mac=64%3A09%3A80%3A10%3A15%3A27&ci=20&__skcy=X6Jxu5SCaijU80yX5ioQuvCDKj4%3D&__skua=5657981d60b5e2d83e9c64b453063ada&__skts=1459731016.350255&wifi-name=Xiaomi_1526&client=iphone&uuid=5C7B6342814C7B496D836A69C872202B5DE8DB689A2D777DFC717E10FC0B4271&__skno=FEB757F5-6120-49EC-85B0-D1444A2C2E7B&utm_content=5C7B6342814C7B496D836A69C872202B5DE8DB689A2D777DFC717E10FC0B4271&utm_source=AppStore&utm_medium=iphone&version_name=6.6&wifi-cur=0&wifi-strength=&offset=0&utm_campaign=AgroupBgroupD100H0&__skck=3c0cf64e4b039997339ed8fec4cddf05&msid=0FA91DDF-BF5B-4DA2-B05D-FA2032F30C6C2016-04-04-08-38594
+
+//-------------------
+
+如果像在localstorage中存一个对象，那么先要将这个对象通过JOSN.stringify转为JSON字符串str，
+然后localstorage.xxx = str; 读取的话直接JSON.parse(localstorage.xxx)
+
+//-------------------
+
+node中包的感悟：以下为项目中js文件引用包的目录结构
+
+|-- node_modules
+  |-- whj
+    |-- package.json
+    |-- index.js
+    |-- xxxxx.js
+|-- a.js
+在a.js中引用whj这个包：require('whj')
+此时，whj包中，其package.json中的main的指向:
+若"main": "index.js"，那么require('whj')返回的就是whj/index.js中exports的东西
+若"main": "xxxxx.js"，那么require('whj')返回的就是whj/xxxxx.js中exports的东西
+若包中没有package.json文件，那么a.js想要require('whj')这样引入whj包,那whj包中必须有index.js
+
+//----------------------
+
+js获取浏览器地址中的各个部分：http://www.jb51.net/article/82519.htm
+
+//----------------------
+
+获取最完整的浏览器地址：
+`${window.location.href.split("://")[0]}://${window.location.host}${window.location.pathname}${window.location.search}`
+
+//----------------------
+
+nodeJS中
+导出：module.exports = xxx
+导入：require('./yyy.js')
+---
+es6中：
+导出: export default xxx
+     export const xxx
+     export function xxx(){}
+导入: import xxx from './xx.js'
+     import {xxx,yyy} from './xx.js'
+     import xxx from 'node_modules中的包名'
+注意：以上两种导入方式在webpack中不可以混用，建议普通的js之间的引用使用es6的导出/引入方式
+
+//---------------------
+
+根据后台的数据状态展示不同的样式：
+this.classMap = [ //'减 折 特 票 保'
+  'decrease',
+  'discount',
+  'special',
+  'invoice',
+  'guarantee'
+]
+<span class="icon" :class="classMap[seller.supports[0].type]"></span>
+
+//---------------------
+
+文字超出盒子，显示...,在盒子上使用以下css:
+white-space:nowrap
+overflow:hidden
+text-overflow:ellipsis
+
+//-----------------------
+
+大背景图的写法：(仿elema项目的header中的头图)
+<div class="a">
+  <div class="b">
+    <img src="xxx" width:100% height:100%/>
+  </div>
+</div>
+.b是大背景图片
+width:100%
+height:100%
+left:0
+top:0
+position:absolute
+z-index:-11
+filter:blur(10px)
+
+//------------------------
+
+js获取cookie的方法：  http://www.jb51.net/article/64330.htm
+
+//------------------------
+
+获取元素在数组索引值;
+var arr=[1,2,3,4]
+arr.indexOf(2);//返回1
+
+//------------------------
+
+backdrop-filter:blur(10px)  苹果端显示大遮罩层的模糊
+
+Math.floor(num * 2) / 2
+
+css Sticky footers 布局  实现就算上面有内容，下面的按钮依然能定在底部（并且不会遮挡）
+固定的套路：
+01.定好固定布局，如下：
+<div>
+  <div class="detail-wraper clearfix"> <!--最外层-->
+    <div class="detail-main"></div> <!--包含内容的层-->
+  </div>
+  <div class="detail-close"></div> <!--定在底部的层-->
+</div>
+
+02.写上面的css，以下为必须的css样式 64很重要
+.detail-wraper
+  min-height:100%
+  width:100%
+  .detail-main
+    padding-bottom:64px
+.detail-close
+  position:relative
+  height:32px
+  width:32px//居中使用
+  margin:-64px auto 0 auto
+  clear:both
+
+//-----------------------------
+
+两条横线中加标题
+布局：
+<div class="title">
+  <div class="line"></div>
+  <div class="text">优惠信息</div>
+  <div class="line"></div>
+</div>
+样式：
+.title
+  display:flex
+  width:80%
+  margin:30px auto 24px auto
+  .line
+    flex:1
+    position:relative
+    top:-6px
+    border-bottom:1px solid rgba(255,255,255,0.2)
+  .text
+    padding:0 12px
+    font-size:14px
+
+//-------------------------------
+
+实现子元素在父元素中垂直居中
+<div class="father">
+  <div class="child">啦啦啦</div>
+</div>
+.father{display:table;height:100px;width:100px}
+.child{display:table-cell;vertical-align:middle}
+
+//-------------------------------
+
+Math.round(5.2)//四舍五入取整
+Math.abs(-10)//取绝对值
+
+//---------------------------
+
+子元素给父元素传值并调用父元素的方法：在子元素的点击事件中写：this.$emit('pp', 666)
+父元素中：<child @pp="mmm"></child>
+mmm(v){
+  console.log(v)
+}
+
+//--------------------------
+
+Vue的计算属性，只要计算属性监视的那个数据发生了变化，那么这个计算属性的函数就会重新计算一次，使用到购物车很简便
+
+Vue的watch监听对象中的一个属性：
+watch: {
+    postData: {
+      handler(val, oldVal) {
+        console.log(val.id)// val是新的postData, oldVal是旧的postData
+      },
+      deep: true
+    }
+  },
+
+//-------------------------
+
+微信中刷新当前页面的方法：
+wxReload(){
+  if(!window.location.search){
+    window.location.href = `${window.location.href}?timeHook=${Date.now()}`
+  }else{
+    if(window.location.href.split('timeHook').length!==1){
+      window.location.href =`${window.location.href.slice(0,-23)}`
+    }else{
+      window.location.href = `${window.location.href}&timeHook=${Date.now()}`
+    }
+  }
+}
+
+//----------------
+
+微信开发如果使用了vue，那么vue中的this,一定要写成vm
+
+//-----------------
+
+VUE中内联样式：
+:style="{'backgroundImage':`url(${foodData.image})`}"
+
+REACT中内联样式
+style={{'backgroundImage':`url(${foodData.image})`}}
+
+//-------------------
+
+Vue.set(this.food, 'count', 1)
+
+//-------------------
+
+desc: { //Object的默认写法  PS: Array,Date...等对象都要这样写默认值
+  type: Object,
+  default () {
+    return {
+      all: '全部',
+      positive: '满意',
+      negtive: '不满意'
+    }
+  }
+}
+
+//--------------------
+
+类似传统格式的vue日历插件在：传统日历插件\src\base\calendar\calendar.vue中
+使用的时候直接用components组件的形式引入即可，使用方法在：传统日历插件\src\components\rank\rank.vue中（排行页面）
+
+//--------------------
+
+自己的日历封装在
+日历插件封装\src\components\recommend\recommend.vue中
+
+//-------------------
+
+vux提供的日历插件看一下 https://doc.vux.li/zh-CN/components/datetime-view.html
+基于vux扩展的日历插件看：http://blog.91525.net/js/2017080196.html
+
+//--------------------
+
+for循环每隔1s执行一次：
+for (let i = 0; i <= 2; i++) {
+  setTimeout(() => {
+    console.log(i+1)
+  }, (i + 1) * 1000)
+}
+
+//--------------------
+
+自己写的本地包中不要出现子包中有node_modules文件夹，将依赖的子包都写在项目根目录中的node_modules
+
+在项目根目录中根据根目录的package.json来进行npm install的时候，会把根目录中的package.json中的开发依赖与生产依赖包全部下载下来，
+而根目录中package.json中的子包中也有package.json，那么子包只会下载他自己的package.json中的生产环境依赖包dependencies，而不会下载devDependencies
+并且以上所有下载下来的包全部都在根目录的node_modules文件夹中，子包中不会有node_modules文件夹
+
+
+以Bootstrap为主角来理解：
+生产环境依赖包(老百姓使用它的时候)：dependencies:{}  ----> 使用Bootstrap的时候一定要用到jQuery  ,jQuery就是Bootstrap的生产环境依赖包
+开发环境依赖包(开发者研发它的时候)：devDependencies:{} --> 开发人员在开发Bootstrap的时候使用了gulp前端自动化构建工具，那么gulp就是Bootstrap的开发环境依赖包
+
+//--------------------
+
+前后分离的项目中，如果前台请求涉及到跨域，就要用到谷歌的跨域插件。
+因为最后前台项目打包以后，与服务端还是同源的，所以开发过程中无需解决跨域问题，只需暂时使用谷歌的跨域插件接口
+
+//--------------------
+
+Promise尽量在主动抛出错误的时候，来执行失败的方法
+
+//--------------------
+Object.keys({'a':111,'b':222});
+Object.values({'a':111,'b':222});
+
+//--------------------
+
+点击两次退出的逻辑：
+arrow:false
+fun() {
+  if (this.arrow) {
+    console.log('退出了');
+  } else {
+    this.arrow = true
+    console.log('再按一次退出');
+    setTimeout(() => {
+      this.arrow = false
+    }, 2000)
+  }
+}
+
+//-----------------------
+
+字符串.trim()  去掉字符串左右两端的空格
+
+//----------------------
+
+let arr = ['aa','bb','cc']
+arr.includes('bb')  返回 true
+
+//---------------------
+
+阻塞程序进行的代码在不影响用户体验的情况下可以异步执行：
+console.log('开始');
+setTimeout(()=>{
+    for(var i=0;i<10000000000;i++){
+    }
+    console.log('循环完了');
+},0);//setTimeout实现了异步代码最后执行
+console.log('执行完了');
+
+//----------------------
+
+自定义npm全局命令行工具的方法：
+包中的|package.json中的
+scripts{
+  "start":"node 1.js",
+  "test":"node 2.js"
+}
+进入package.json所在的目录中
+命令行npm start 就可以运行1.js了  ，相当于node 1.js
+命令行npm test 就可以运行2.js了  ，相当于node 2.js
+输入npm显示所有npm命令
+
+"bin":{
+  "haha":"3.js"  //建议包名与bin中的字段名'haha'一致
+}
+然后在3.js中第一行固定写法写上 #!/usr/bin/env node
+然后还要在package.json目录中命令行安装 npm link
+告诉系统拿node来执行，在全局命令行输入 haha, 就调用了3.js
+
+//----------------
+解构赋值的一种：
+let a = 1;let b = 12
+let obj = {a,b}
+
+//-----------------
+
+删除对象中的一个键值对：delete obj['a']
+
+//-----------------
+将自己的包上传到npm上的步骤：(包名必须小写加中划线)
+01.创建一个与包名相同的包名文件夹，在这个文件夹中npm init配置好package.json文件，然后写好这个包的逻辑，可以看“图000自己的包通过自己包中package被人引用.png”
+03.命令行使用nrm use npm  来切换到npm上
+02.在包名文件夹下npm login 输入：
+  wudilaobaba
+  whjlyn938751
+  1273803935@qq.com
+03.进入https://www.npmjs.com/settings/wudilaobaba/tokens中会看到新生成了一个token
+04.进入C:// 用户目录中找到.npmrc文件，可以看到刚刚生成的token
+05.在包名文件夹中输入 npm publish即可上传成功
+
+//npm发包的一些命令总结：
+npm view 包名 versions
+修改本地包以后想要更新到npm上：第一个版本永远都是1.0.0
+npm version 下面的三个参数
+patch：这个是补丁的意思，补丁最合适；(变为 1.0.1)
+minor：这个是小修小改；(变为 1.1.0)
+major：这个是大改咯；  (变为 2.0.0)
+最后npm publish
+
+//npm包发布24小时以内可以删除：npm i 要删除的包，进入包的根目录，
+windows命令行中 ： npm unpublish 包名@版本号
+linux命令行中 ： npm unpublish 包名@*版本号
+.md文件在线编辑 http://mahua.jser.me/
+
+//-----------------
+vue组件中引入css样式：
+@import 'css的相对路径'
+
+//----------------
+
+下载atom-minify进行js代码压缩
+
+//----------------
+
+获取对象在数组中的索引值：
+var arr = [{
+  name: '1'
+}, {
+  time: 45
+}, {
+  pig: 12
+}];
+let y = arr.map(item => item.name).indexOf('1')
+console.log(y);
+
+//--------------------
+node中注意路径对象的5个属性：
+let obj = {
+  root: 'D:\\',//一定是反斜杠
+  dir: 'D:\\name\\class\\xx\\yy',
+  base: '01.js',
+  ext: '.js',
+  name: '01'
+}
+
+//-------------------
+nodeJS使用http模块的话，一定要写：
+res.writeHeader(200, {"Content-type": "application/json;charset=UTF-8"})
+
+//-----------------
+
+前端get请求不需要在headers中传Content-Type
+
+//-------------------
+
+前提：
+服务端不论是get还是post,一般都建议给客户端返回json格式
+服务端Content-Type的作用：只讨论POST中
+响应头的Content-Type设为application/x-www-form-urlencoded;charset=utf-8 或 text/html;charset=utf-8  那么客户端看见的Response是黑色的，说明返回的是json字符串
+响应头的Content-Type设为application/json;charset=utf-8，那么客户端看见的Response是彩色的，说明返回的是json对象
+
+客户端Content-Type的作用：只讨论POST中
+目前与nodeJS配合只能在客户端中写application/x-www-form-urlencoded;charset=utf-8或 text/plain;charset=utf-8
+
+//-------------------
+iView的按需引入步骤：
+01. npm install -S iview
+02. npm install -D babel-plugin-import
+03. 在.babelrc文件中配置：(vue模板项目中配置为：)
+{
+  "plugins": [
+    ["transform-runtime", "import", {
+      "libraryName": "iview",
+      "libraryDirectory": "src/components"
+    }]
+  ],
+}
+04. 在 main.js 或根组件执行 import 'iview/dist/styles/iview.css';引入iview的样式文件(可以忽略)
+05. main.js中：想用什么组件就在下面写什么组件
+import { Button, Table } from 'iview';
+Vue.component('Button', Button);
+Vue.component('Table', Table);
+06.在.vue文件中使用<Button type="primary"><Button>即可
+
+//-------------------
+后续：
+01.node高级
+02.手机图片上传
+
+//------------------
+
+判断数组中是否包含某个元素
+[1, 2, 3].includes(2)     // 返回true
+
+数组的filter方法：
+let a = [1, 2, 3, '4']
+let b = a.filter((item) => {
+  return item > 3
+})
+console.log(b);
+
+Array.of() 将类数组对象转为数组
+
+//--------------------
+nodeJS 删除空文件夹：
+fs.rmdir(path, callback)
+fs.rmdirSync(path)
+
+nodeJS删除文件
+fs.unlink(path,(err)=>{})
+
+node将文件或文件夹重命名
+fs.rename(oldPath, newPath, [callback(err)])
+
+
+自己上传的所有的npm包上传之前都要进行转为es5(不然vue项目中打包的时候会报错)
+//开发npm包的时候
+前提：电脑中保存一份es6的原始js文件，位于D:/myPackage/js-fun-bywhj/es6/index.js
+     开发时，根据不同的电脑修改 js-fun-bywhj\urlBase\index.js中的变量值，修改好以后，执行一下步骤
+进入js-fun-bywhj根目录：
+01. npm i
+02. npm run startdev
+03. 开始开发包的index.js ，开发以后依次执行以下两步
+04. npm run enddev
+05. gulp
+06. nrm use npm
+07. npm version patch
+08. npm publish
+
+
+//--------------------
+随机整数的写法：生成start到end的随机整数(包含start和end)
+let randomNum = (min,max){
+  let num = Math.floor(Math.random()*(min - (max+1)) + (max+1));
+  // 或 ：let num = parseInt(Math.random()*(min - (max+min)) + (max+min));
+  return num
+}
+
+//-------------------
+去掉base64格式前缀的方法：
+let deleteBase64Header(base64url){
+  let replacePart = base64url.toString().split(',')[0]+','//实际是就是base64格式的前缀如：data:text/plain;base64,
+  let base64Data = base64url.toString().replace(replacePart  , "");
+  return base64Data
+}
+
+//------------------
+获取选中的文件的信息：
+<input type="file" @change="checkFile" multiple>
+methods: {
+  checkFile(e) {
+    let files = e.target.files || e.dataTransfer.files;
+    console.log(files);//文件的信息
+  }
+}
+
+//------------------
+大写转小写：
+'DS'.toLowerCase()
+
+//-----------------
+JSON字符串：key和value必有双引号！！！！！！！
+所以，JSON.parse()的参数必须为标准JSON字符串
+
+//-----------------
+数组的typeof 是'object'
+
+//----------------
+vue自动触发点击事件 this.$refs.btn.click()  适用于使用file提交文件的onchange事件
+
+//---------------
+Atom的插件安装位置：C:\Users\12738\.atom\packages
+Atom的安装位置：C:\Users\12738\AppData\Local\atom  只保留里面的app-1.27.2文件夹，大于这个版本号的文件夹会出现闪退现象
+
+//formidable使用说明：
+https://www.cnblogs.com/yuanke/p/5221853.html
+
+//迭代器的使用，适用于将异步代码同步化：
+(function iterator(i) {
+  if (i >= 10) return
+  console.log(i);
+  iterator(i + 1) //特别注意iterator(i + 1)的调用时机
+})(0)
+
+
+
+//================字符串及数组API===================
+
+一、数组API：
+1.arr.length
+  查看数组中的元素个数（一般情况下）：arr.length
+  使用数组中的最后一个元素：arr[arr.length-1]
+  在数组中追加一个元素：arr[arr.length]="新值"
+  手动改小arr.length的值，可以自动删除数组中的元素
+
+2.将数组转为字符串
+  arr.toString() （输出格式固定）no
+  arr.join("分隔符") no
+
+3.数组拼接
+  arr.concat(数组或单个值) no
+
+4.截取出一部分子数组（取值的时候程序从左往右看，支持倒数dao）no
+  arr.slice(开始位置值坐标，想取到的值的下标+1)
+  省略第二个参数，表示从开始位置值坐标截取到结尾
+  倒数的第一个是-1
+  含头不含尾
+
+5.删除  插入  替换（都包含第一个参数角标的位置）(splice  dao)  yes
+  var arr=[1,2,3,4,5,6,7,8,9,0]
+  删除:arr.splice(2,3)--->结果：arr=[1,2,6,7,8,9,0]
+  注：如果var t=arr.splice(2,3)，输出t的结果就是：被删除掉的元素
+  替换：arr.splice(3,2,"咕咕")--->结果：arr=[1,2,3,"咕咕",6,7,8,9,0]
+  注：替换就是在删除的基础上，删除掉后的空缺位置依次补上新值
+      如果var t=arr.splice(3,2,"咕咕")，输出t的结果就是：被删除掉的元素（同上面的删除）
+  插入：arr.splice(3,0,"哈哈","呱呱")--->结果：arr=[1,2,3,"哈哈","呱呱"，4,5,6,7,8,9,0]
+  注：第一个值，想要在这个元素后面插入，那么第一个值就是这个元素的下标+1
+      如果var t=arr.splice(3,0,"哈哈","呱呱")，那么输出的t是一个空数组
+      想从头插入，那么前两个值必定是0,0
+
+6.数组内元素翻转 yes
+  arr.reverse()
+
+---es6数组方法
+7.新建数组
+let arr = Array.of(3, 4, 9, 10, 11);
+console.log(arr);
+
+8.将伪数组转为真正的数组类型，以便于使用数组的方法
+let 真数组 = Array.from(伪数组,(item)=>())
+
+9.填充数组fill：
+console.log([1, 'a', undefined].fill(7)); //里面的每个元素都变成了7
+console.log(['a', 'b', 'c'].fill(7, 1, 3)); //从下标1开始到下标3，之间的元素全部替换为7（含头不含尾）
+
+10.在数组内部，将指定位置的元素复制到其他位置上
+let arr = [1, 2, 3, 4, 5, 6].copyWithin(2, 0, 5)
+//方法：copyWithin(x,y,z)
+//01.将数组中x位置的元素扣掉
+//02.将y~z部分的元素(含头不含尾)填充到扣掉的位置
+//03.去掉右边多出数组长度的元素，就是最终结果
+
+11.数组的查找元素：
+find findIndex includes
+ 01.//数组查找元素: find 只能查找出符合条件的第一个元素
+    console.log([1, 2, 3, 4, 5, 6].find((item) => item > 3));
+ 02.//数组查找元素: findIndex 只能查找出符合条件的第一个元素的下标值
+    console.log([1, 2, 3, 4, 5, 6].findIndex((item) => item > 3));
+ 03.//数组查找元素: includes
+    console.log([1, 2, NaN].includes(1)); //查找数组是否包含元素1
+
+12.数组的元素由对象构成，想要修改某个对象中的值：
+arr.forEach((item) => (
+  item.a ? item.a = 2 : ''
+))
+
+13.数组的元素由对象构成，想要删除某个元素：
+let Index = arr.findIndex((item) => (item.a)) //找到数组中对象的索引值
+arr.splice(Index, 1)
+
+
+********************************出/入栈都会改变原数组*********************************
+二、字符串API（全都不改变原字符串）
+1.转义字符：\           \t          \n
+2.大小写转换( no )
+  toUpperCase
+  toLowerCase
+3.获取指定位置的字符：str[i]    str.charAt(i)
+  获取指定位置字符的Unicode  :  charCodeAt(i)
+4.查找关键字的位置（返回关键字的下标）：indexOf不支持正则和模式匹配
+  从左向右找：indexOf()
+  var str="no zuo no die no can no bi bi no bi no no";
+  var i=-1;
+  while((i=str.indexOf("no",i+1))!=-1){
+	  console.log(i);
+  }
+
+  从右向左找：lastIndexOf()
+  var str="no zuo no die no can no bi bi no bi no no";
+  var i=str.length;
+  while((i=str.lastIndexOf("no",i-1))!=-1){
+          console.log(i);
+	  if(i<=0){break;}
+  }
+
+5.获取子字符串:
+  substring("开始位置","想要取到的字符的下标+1")---->不支持负数参数
+  substr("开始位置",获取个数)------------------------->支持负数参数(系统是从左往右)
+6.分割字符串：(把字符串分割并保存为数组！)
+  split("只能是字符串里面的某个字符",个数)
+7.替换
+  replace(/关键词/ig,"替换内容")  -->关键词/ig：叫模式匹配，如果只想替换一个的话，就replace("关键词","替换内容")
+
+8.查找
+  match(/关键词/ig) 返回的是一个数组，用来检查关键字的个数,   找不到返回null
+  search：始终仅能查找第一个关键词的位置，用来检查有还是没有，找不到返回-1
+
+9.与正则挂钩：
+  字符串中支持正则的API：
+    var i=str.search(/正则/);
+    var arr=str.match(/正则/g);
+    var arr=str.split(/正则/);
+    var newStr=str.replace(/正则/g,"替换内容");
+
+
+转大位in撒分替查，
+2正
+
+===================================================================================================================
+Vue的路由嵌套记忆规则：
+在路由的配置文件中写子路由：
+{
+  name: 'recommend',
+  path: '/recommend',
+  component: Recommend,
+  children: [{
+    name: 'small',
+    path: '/small',
+    component: Small, //从子路由组件的children中网上找，看谁是Small组件的父组件，那么卡已找到组件Recommend，在组件Recommend中的<router-view><router-view>的位置就是组件Small的位置
+  }]
+},
+
+01~ 前提：.router-link-active这个当前样式只对当前组件中的<router-link>有效
+02~ .router-link-active ：如果当前路由是/search/photo,那么只要有<router-link>的to匹配上了当前路由'/search'，那么这个<router-link>就高亮
+03~ 路由的配置文件中：
+{
+  name: 'photo',
+  path: '/search/:directory', //只要浏览器中的路由与左边匹配，01.页面就会去找Photo的<router-view>的相应位置(也就是Photo的<router-view>所在的组件)；02.然后在页面中显示Photo的<router-view>所在的组件，进而显示出Photo的<router-view>
+  component: Photo            //'相应位置'的查找方法看上面'Vue的路由嵌套记忆规则'
+}
+
+不通过<router-link>进行跳转，就要使用以下方法：
+this.$router.push({
+  path: '/recommend/cc',//也可以写name:'recommend'   path/name二选其一
+  query: {
+    xx: '11',
+    asd: '666'
+  }
+})
+那么页面就会带着参数跳转到http://localhost:2568/recommend/cc?xx=11&asd=666
+
+页面回退：this.$router.go(-1)
+
+//=========================
+
+任意文件转为base64后，通过nodeJS进行文件还原
+nodeJS可以通过var dataBuffer = new Buffer(base64Data, 'base64') 的形式来创建一个buffer，用来还原原文件
+这里的base64Data是base64格式去掉类似头部的data:text/plain;base64,以后的字符串，
+所以base64Data的获取方法是: base64字符串.toString().split(',')[0]+','
+将base64还原为文件的方法如下：
+后端不需要base64头部(ata:text/plain;base64,) ,接口联调的时候问清楚前台需不需要传base64头部
+Step01. 获取前台传来的extName,和base64字符串
+Step02. var dataBuffer = new Buffer(base64Data, 'base64')
+Step03. fs.writeFile(`./upload/${Date.now()}${extName}`, dataBuffer,'utf8', (err)=> {
+        if(err){
+          res.end('err');
+        }else{
+          res.end('成功')
+        }
+      });
+
+//=========================
+***若定义的函数a中存在异步函数，那么这个函数a一定要用回调函数来执行函数a的结果
+看：'node异步回调通用写法.js'
+
+//==========================
+
+ios中的input输入框如果想要禁用，不让用户输入，那么只能用readonly属性，并用内联样式来控制其文字颜色
+
+//所有的网络资源的链接一定要加'http://协议头'
+
+//===========================
+
+Object新用法：https://blog.csdn.net/wbiokr/article/details/67014505
+Object.assign(obj1,obj2) //返回值为：后面的对象在前面对象的基础上追加字段或修改字段值
+const object1 = {
+  a: 1,
+  b: 2,
+  c: 3
+};
+const object2 = Object.assign({c: 4, d: 5}, object1);
+console.log(object2.c, object2.d);
+// expected output: 3 5
+
+//==================================
+nodeJS获得请求头中的各种头：
+req.headers.referer
+req.headers.host
+req.headers.referer
+等等....  可在请求头信息中看
+
+//================================
+
+前后分离项目的跨域问题解决方案：(POST请求的跨域还未解决)
+从今往后只要是涉及到前后分离的项目==***==，前后端都要执行以下写法：（实现了GET/POST允许跨域携带Session/Cookie请求服务端）
+后端：要设置以下响应头：
+若前端需要带cookie进行请求(这里的cookie是后台传来的，也就是Set-Cookie中的Cookie，也就是第二次请求的时候所带去的Cookie头)
+那么后台就一定要设置以下两项(来解决前端请求跨域问题)：
+01. res.header('Access-Control-Allow-Origin', req.headers.origin);//第二个参数为所允许的前端域名+端口
+02. res.header('Access-Control-Allow-Credentials', 'true')
+综合01、02可写为以下语句：,建议使用app.use中间件来包裹下面，如： (copy使用即可),以下app.use语句，后台必写！！！！！！！！！！！！！！！！！！！！
+app.use((req, res, next) => {
+  if (req.headers.origin == 'http://192.168.1.100:2568' || req.headers.origin == 'http://127.0.0.1:2568' || req.headers.origin == 'http://localhost:2568') {
+    res.header('Access-Control-Allow-Origin', req.headers.origin);
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
+    res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Credentials', 'true')
+  }
+  next()
+})
+
+前端：基于fetch请求，要加一个属性，也就是  credentials: 'include'(携带后台设置的cookie进行请求，也就是携带请求头中的Cookie头进行请求) ,
+已经在network-request-bywhj包中写好了
+
+//===================================
+
+*** 从今往后，所有的POST请求，都要在Headers中加Content-Type:xxx ***
+如：表单提交，提交的数据为格式为:name=Mike&age=12  Header中要设置为：{'Content-Type': 'application/x-www-form-urlencoded'}
+注：Content-Type的值可以根据postman来查看
+重：day08/code03/02.js 总结了前端的POST方式的'表单提交'、'JSON提交'、'任意字符串'三种post提交的接受方法，以及前端提交时要传的Header及数据格式
+
+//==================================
+今后如果Cookie或Session完全是由后台来添加的话，
+那么前台想要使用Cookie或Seesion来判断页面的业务逻辑，
+就需要后台提供一个获取Cookie或Session状态的接口
+
+//==============================
+
+path.sep     nodeJS不用path模块写路径的时候斜杠一定要用path.sep
+\ on Windows
+/ on POSIX
+
+//===========================
+db.find()函数中，如果数据中存在md5后的密码，那么将这条数据返回前台是不应该带密码的，所以要进行一下处理：
+delete data.result[0].password
+res.json(data)
+
+//============================
+img的DOM的图片加载完成的方法：
+img.onload = function(){}
+img的DOM的图片加载失败的方法：
+img.onerror = function(){}
+
+//============================
+bind函数的理解：bind函数就是为了明确this是什么
+var bar=function(){
+  console.log(this.x);
+}
+var foo={
+     x:3
+}
+bar();
+bar.bind(foo)();
+//01.此时bar.bind()是一个函数，需要调用该函数才能执行bar方法,即bar.bind()();
+//02.bind中的第一个参数就是bind的点左边的函数中的this了
+//03.最终的调用结果就是调用了bar方法，bar方法中的this就是bind的第一个参数
+ /*或*/
+var func=bar.bind(foo);
+func();
+
+输出：
+undefined
+3
+//传入 bind() 方法的第二个以及以后的参数加上绑定函数运行时本身的参数按照顺序作为原函数的参数来调用原函数。
+
+//判断当前页面是否被iframe包含
+if(self!==top){
+  alert("我被iframe嵌套了")
+}
