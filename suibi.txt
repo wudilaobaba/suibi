@@ -825,6 +825,16 @@ bar.bind(foo)();
 var func=bar.bind(foo);
 func();
 
+//react組件中bind参数的传参顺序
+this.keyUp.bind(this,999,888) //第一个参数永远是this或即将成为this的对象,后面的参数随意
+keyUp(val,val1,e){  //形参中第一个是实参中第二个、第三个，最后一个参数是e,就是键盘事件的参数放在最后一个
+  console.log(val,val1);
+  if(e.keyCode === 13 && this.state.val.trim()){
+    console.log(123);
+  }
+}
+
+
 输出：
 undefined
 3
