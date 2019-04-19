@@ -1,4 +1,4 @@
-﻿配置host的意义在于：
+﻿﻿配置host的意义在于：
 进入C:\Windows\System32\drivers\etc  打开hosts文件
 在里面写 127.0.0.1    www.ppp.com
 意思就是：如果本地开启了一个服务，浏览器访问www.ppp.com，就相当于访问了127.0.0.1
@@ -831,6 +831,16 @@ keyUp(val,val1,e){  //形参中第一个是实参中第二个、第三个，最�
   console.log(val,val1);
   if(e.keyCode === 13 && this.state.val.trim()){
     console.log(123);
+  }
+}
+
+键盘事件的另一种传参方式：
+<input
+  onKeyUp={(e)=>{keyUp(inputValue,e)}}
+/>
+keyUp(value,even){
+  if(even.keyCode===13){
+    console.log(value)
   }
 }
 
