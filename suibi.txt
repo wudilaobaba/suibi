@@ -844,6 +844,11 @@ keyUp(value,even){
   }
 }
 
+mapStateToProps与mapDispatchToProps中：
+方法与值之间的传递
+方法与方法之间的内部调用
+都要使用传参的形式进行互相使用！！！
+
 
 输出：
 undefined
