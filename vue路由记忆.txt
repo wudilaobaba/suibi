@@ -1,0 +1,21 @@
+Vue的路由嵌套记忆规则：
+在路由的配置文件中写子路由：
+{
+  name: 'recommend',
+  path: '/recommend',
+  component: Recommend,
+  children: [{
+    name: 'small',
+    path: '/small',
+    component: Small, //从子路由组件的children中网上找，看谁是Small组件的父组件，那么卡已找到组件Recommend，在组件Recommend中的<router-view><router-view>的位置就是组件Small的位置
+  }]
+},
+
+01~ 前提：.router-link-active这个当前样式只对当前组件中的<router-link>有效
+02~ .router-link-active ：如果当前路由是/search/photo,那么只要有<router-link>的to匹配上了当前路由'/search'，那么这个<router-link>就高亮
+03~ 路由的配置文件中：
+{
+  name: 'photo',
+  path: '/search/:directory', //只要浏览器中的路由与左边匹配，01.页面就会去找Photo的<router-view>的相应位置(也就是Photo的<router-view>所在的组件)；02.然后在页面中显示Photo的<router-view>所在的组件，进而显示出Photo的<router-view>
+  component: Photo            //'相应位置'的查找方法看上面'Vue的路由嵌套记忆规则'
+}

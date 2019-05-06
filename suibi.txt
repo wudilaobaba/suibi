@@ -859,3 +859,6 @@ undefined
 if(self!==top){
   alert("我被iframe嵌套了")
 }
+
+字符串中的所有反斜杠全部替换为斜杠：
+str = str.replace(/\\/g,"/")
