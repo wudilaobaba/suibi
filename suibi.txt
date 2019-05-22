@@ -862,3 +862,19 @@ if(self!==top){
 
 字符串中的所有反斜杠全部替换为斜杠：
 str = str.replace(/\\/g,"/")
+
+
+for循环remove dom，会造成下标位置错乱，解决如下：
+let arrDom = [];
+//先将要删除的tr元素放在arrDom中
+for (let i=0;i<tr.length-1;i++) { //tr为<tr>的集合
+  arrDom.push(tr[i]);
+}
+//再去arrDom中去执行remove操作
+for(let i=0;i<arrDom.length;i++){
+  arrDom[i].remove();
+}
+//最后依据业务需求重置tr的下标
+for (let i = 0; i < addIcons.length; i++) {
+  addIcons[i].className = `appendLine append${i}`
+}
