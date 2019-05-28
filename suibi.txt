@@ -878,3 +878,7 @@ for(let i=0;i<arrDom.length;i++){
 for (let i = 0; i < addIcons.length; i++) {
   addIcons[i].className = `appendLine append${i}`
 }
+
+//js设置dom的disabled属性：
+document.getElementsByClassName("ant-btn")[0].disabled = true;  //禁用按钮
+document.getElementsByClassName("ant-btn")[0].disabled = false;  //启用按钮
