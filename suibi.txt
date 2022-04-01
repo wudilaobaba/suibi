@@ -1,4 +1,4 @@
-﻿﻿配置host的意义在于：
+配置host的意义在于：
 进入C:\Windows\System32\drivers\etc  打开hosts文件
 在里面写 127.0.0.1    www.ppp.com
 意思就是：如果本地开启了一个服务，浏览器访问www.ppp.com，就相当于访问了127.0.0.1
@@ -359,7 +359,7 @@ let obj = {a,b}
 03.命令行使用nrm use npm  来切换到npm上
 02.在包名文件夹下npm login 输入：
   wudilaobaba
-  whjlyn938751
+  w*******751
   1273803935@qq.com
 03.进入https://www.npmjs.com/settings/wudilaobaba/tokens中会看到新生成了一个token
 04.进入C:// 用户目录中找到.npmrc文件，可以看到刚刚生成的token
